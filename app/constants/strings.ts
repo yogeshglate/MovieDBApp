@@ -1,0 +1,16 @@
+export default {
+  whatsPopular: "What's Popular",
+  freeToWatch: 'Free To Watch',
+  latestTrailers: 'Latest Trailers',
+  trending: 'Trending',
+  streaming: 'Streaming',
+  onTv: 'On Tv',
+  forRent: 'For Rent',
+  inTheatres: 'In Theatres',
+  movies: 'Movies',
+  tv: 'TV',
+  today: 'Today',
+  thisWeek: 'This Week',
+  overview: 'Overview',
+  movieDB: 'MovieDB',
+};

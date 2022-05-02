@@ -1,0 +1,1 @@
+# All application properties in this folder like images, icons & icons

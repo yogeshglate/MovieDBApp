@@ -1,0 +1,1 @@
+# All constants like AppConstants, Navigation, Strings, StaticData in this folder. 
