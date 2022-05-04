@@ -13,4 +13,13 @@ export default {
   thisWeek: 'This Week',
   overview: 'Overview',
   movieDB: 'MovieDB',
+  homeScreen: 'Home Screen',
+  detailsScreen: 'Details Screen',
+  networkError: 'NETWORK_ERROR',
+  internetCheck: 'Please check your internet connection',
+  connectionError: 'CONNECTION_ERROR',
+  serverError: 'SERVER_ERROR',
+  serverUnavailable: 'Server is not available',
+  somethingWrong: 'Something went wrong',
+  noCache: 'no-cache',
 };

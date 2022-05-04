@@ -1,4 +1,4 @@
-export default {
-  HOME: 'HOME',
-  DETAILS: 'DETAILS',
-};
+export enum MainRoutes {
+  HOME = 'HOME',
+  DETAILS = 'DETAILS',
+}
