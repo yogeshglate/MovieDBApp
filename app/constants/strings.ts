@@ -29,4 +29,6 @@ export default {
   trailerDescription: 'Season 5 Date Announcement',
   trailerName: 'Cobra Kai',
   play: 'play',
+  keyError: 'Invalid API key: You must be granted a valid key.',
+  notFoundError: 'The resource you requested could not be found.',
 };

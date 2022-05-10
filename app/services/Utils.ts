@@ -1,23 +1,23 @@
 import apisauce from 'apisauce';
-import {constants} from '../constants';
+import { AppConstant, strings } from '../constants';
+import { ApiDataProps } from '../sagas/movieSaga';
 
 export const apiConfig = (baseURL: string) =>
   apisauce.create({
     baseURL,
     timeout: 30000,
-    headers: {'Cache-Control': constants.noCache},
+    headers: { 'Cache-Control': strings.noCache },
   });
 
-export async function getError(response: any) {
-  if (response?.problem === constants.networkError) {
-    return constants.internetCheck;
+export async function getError(response: ApiDataProps) {
+  if (response?.status === AppConstant.SUCCESS_CODE) {
+    return false;
   }
-  if (
-    [constants.connectionError, constants.serverError].includes(
-      response?.problem,
-    )
-  ) {
-    return constants.serverUnavailable;
+  if (response?.status === AppConstant.KEY_ERROR) {
+    return strings.keyError;
   }
-  return constants.somethingWrong;
+  if (response?.status === AppConstant.NOT_FOUND) {
+    return strings.notFoundError;
+  }
+  return strings.somethingWrong;
 }

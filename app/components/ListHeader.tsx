@@ -1,17 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useDispatch } from 'react-redux';
+import { strings } from '../constants';
+import MovieActions from '../redux/movieRedux';
+import { Colors } from '../theme';
 import { styles } from './styles/ListHeaderStyles';
 
 export interface ListHeaderProp {
   title: string;
-  dropDownData: { label: string; value: string }[];
+  dropDownData: { label: string; value: string; endpoint: string }[];
+  color?: string;
+}
+interface DropdownSelectedProp {
+  endpoint: string;
 }
 
-const ListHeader = ({ title, dropDownData }: ListHeaderProp) => {
+const ListHeader = ({ title, dropDownData, color }: ListHeaderProp) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(dropDownData[0].value);
   const [items, setItems] = useState(dropDownData);
+  const [endpoint, setEndPoint] = useState(dropDownData[0].endpoint);
+  const dispatch = useDispatch();
 
   const updatedData = useCallback(() => {
     const filteredData = dropDownData.filter(item => {
@@ -26,9 +36,41 @@ const ListHeader = ({ title, dropDownData }: ListHeaderProp) => {
     setItems(updatedData());
   }, [updatedData]);
 
+  const fetchData = useCallback(() => {
+    title === strings.freeToWatch &&
+      dispatch(MovieActions.freeToWatchLoading(endpoint));
+    title === strings.trending &&
+      dispatch(MovieActions.trendingLoading(endpoint));
+    title === strings.whatsPopular &&
+      dispatch(MovieActions.whatsPopularLoading(endpoint));
+    title === strings.latestTrailers &&
+      dispatch(MovieActions.latestTrailersLoading(endpoint));
+  }, [endpoint, dispatch, title]);
+
+  useEffect(() => {
+    fetchData();
+  }, [endpoint, fetchData]);
+
+  const dropdownBackgroundStyle = StyleSheet.flatten([
+    styles.dropdown,
+    title === strings.latestTrailers && {
+      backgroundColor: Colors.filterTextGradient2,
+    },
+  ]);
+
+  const plachholderTitleStyle = StyleSheet.flatten([
+    styles.dropdownLabel,
+    title === strings.latestTrailers && { color: Colors.primary },
+  ]);
+
+  const listHeaderTitleStyle = StyleSheet.flatten([
+    styles.headerText,
+    title === strings.latestTrailers && { color: color },
+  ]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>{title}</Text>
+      <Text style={listHeaderTitleStyle}>{title}</Text>
       <DropDownPicker
         open={open}
         value={value}
@@ -36,7 +78,7 @@ const ListHeader = ({ title, dropDownData }: ListHeaderProp) => {
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
-        style={styles.dropdown}
+        style={dropdownBackgroundStyle}
         labelStyle={styles.dropdownLabel}
         containerStyle={styles.dropdownContainer}
         dropDownContainerStyle={styles.background}
@@ -45,7 +87,10 @@ const ListHeader = ({ title, dropDownData }: ListHeaderProp) => {
         showTickIcon={false}
         autoScroll={true}
         placeholder={dropDownData.find(item => value === item.value)?.label}
-        placeholderStyle={styles.dropdownLabel}
+        placeholderStyle={plachholderTitleStyle}
+        onSelectItem={(selectedItem: DropdownSelectedProp) =>
+          setEndPoint(selectedItem.endpoint)
+        }
       />
     </View>
   );
