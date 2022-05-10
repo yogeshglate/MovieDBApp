@@ -22,4 +22,11 @@ export default {
   serverUnavailable: 'Server is not available',
   somethingWrong: 'Something went wrong',
   noCache: 'no-cache',
+  bars: 'bars',
+  search: 'search',
+  backButton: 'arrow-left',
+  circleMenu: 'ellipsis-horizontal-circle-outline',
+  trailerDescription: 'Season 5 Date Announcement',
+  trailerName: 'Cobra Kai',
+  play: 'play',
 };

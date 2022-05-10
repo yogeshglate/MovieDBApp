@@ -1,25 +1,21 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
-import {Button, Text, View} from 'react-native';
-import {constants, navigationStrings} from '../constants';
-import {RootStackParams} from '../navigation/AppNavigation';
-import {DefaultStyles} from '../theme';
+import { FlatList, SafeAreaView } from 'react-native';
+import { Header, MovieList } from '../components';
+import { flatListData, strings } from '../constants';
+import { styles } from './styles/HomeStyles';
 
-type HomeScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParams>;
-};
-
-const Home = ({navigation: {navigate}}: HomeScreenProps) => {
-  const {homeScreen, detailsScreen} = constants;
-
+const Home = () => {
   return (
-    <View style={DefaultStyles.container}>
-      <Text>{homeScreen}</Text>
-      <Button
-        title={detailsScreen}
-        onPress={() => navigate(navigationStrings.DETAILS, {id: '1001'})}
+    <SafeAreaView style={styles.container}>
+      <Header leftIcon={strings.bars} rightIcon={strings.search} />
+      <FlatList
+        data={flatListData}
+        renderItem={({ item }) => (
+          <MovieList title={item.title} dropDownData={item.dropDownData} />
+        )}
+        showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

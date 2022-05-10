@@ -1,12 +1,13 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react';
 import AppNavigation from './navigation/AppNavigation';
-import {PersistGate} from 'redux-persist/es/integration/react';
 import movieDBStore from './redux/store';
 
 const App = () => {
-  const {store, persistor} = movieDBStore;
+  const { store, persistor } = movieDBStore;
 
   useEffect(() => {
     SplashScreen.hide();

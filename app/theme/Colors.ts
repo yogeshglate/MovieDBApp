@@ -4,4 +4,6 @@ export const Colors = {
   indicatorYellow: '#C6CC09',
   filterTextGradient1: '#c0fecf',
   filterTextGradient2: '#1ed5a9',
+  black: '#000000',
+  white: '#FFFFFF',
 };

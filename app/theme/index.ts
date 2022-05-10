@@ -1,5 +1,19 @@
-import {styles} from './ApplicationStyles';
-import {Colors} from './Colors';
-import {Metrics} from './Metrics';
+import { Images } from '../assets';
+import { styles } from './ApplicationStyles';
+import { Colors } from './Colors';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+  Metrics,
+} from './Metrics';
 
-export {Colors, Metrics, styles as DefaultStyles};
+export {
+  Colors,
+  Metrics,
+  styles as DefaultStyles,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+  Images,
+};
