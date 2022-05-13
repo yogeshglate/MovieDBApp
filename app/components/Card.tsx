@@ -1,6 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AppConstant, navigationStrings, strings } from '../constants';
@@ -29,6 +35,18 @@ const Card = ({
 }: CardProps) => {
   const navigation = useNavigation<HomeScreenProps['navigation']>();
 
+  const progressBarColor =
+    progressValue >= 70 ? Colors.indicatorGreen : Colors.indicatorYellow;
+
+  const trailerNameStyle = StyleSheet.flatten([
+    styles.boldFont,
+    title === strings.latestTrailers && styles.trailerDescription,
+  ]);
+
+  const trailerDescriptionStyle = StyleSheet.flatten([
+    title === strings.latestTrailers && styles.trailerDescription,
+  ]);
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -44,12 +62,13 @@ const Card = ({
               name={strings.circleMenu}
               size={26}
               style={styles.circleMenu}
+              color={Colors.white}
             />
           </ImageBackground>
           <View style={styles.progressView}>
             <CircularProgress
               value={progressValue}
-              activeStrokeColor={Colors.indicatorGreen}
+              activeStrokeColor={progressBarColor}
               inActiveStrokeColor={Colors.black}
               inActiveStrokeOpacity={0.6}
               activeStrokeWidth={5}
@@ -60,8 +79,11 @@ const Card = ({
             />
           </View>
           <View style={styles.cardFooterText}>
-            <Text style={styles.boldFont}>
-              {movieName + movieName + movieName}
+            <Text
+              style={styles.boldFont}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {movieName}
             </Text>
             <Text>{releaseDate}</Text>
           </View>
@@ -83,8 +105,20 @@ const Card = ({
               color={Colors.white}
             />
           </ImageBackground>
-          <Text style={styles.boldFont}>{trailerName}</Text>
-          <Text>{description}</Text>
+          <View style={styles.cardText}>
+            <Text
+              style={trailerNameStyle}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {trailerName}
+            </Text>
+            <Text
+              style={trailerDescriptionStyle}
+              ellipsizeMode="tail"
+              numberOfLines={2}>
+              {description}
+            </Text>
+          </View>
         </>
       )}
     </TouchableOpacity>

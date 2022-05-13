@@ -1,3 +1,4 @@
+import { Colors } from './../../theme/Colors';
 import { StyleSheet } from 'react-native';
 import { verticalScale } from '../../theme';
 
@@ -9,5 +10,8 @@ export const styles = StyleSheet.create({
   movieList: {
     height: verticalScale(370),
   },
-  imageBackground: { marginTop: verticalScale(-35) },
+  imageBackground: {
+    marginTop: verticalScale(-35),
+    backgroundColor: Colors.primary,
+  },
 });

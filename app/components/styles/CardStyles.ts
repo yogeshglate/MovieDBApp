@@ -1,3 +1,4 @@
+import { Colors } from './../../theme/Colors';
 import { StyleSheet } from 'react-native';
 import { horizontalScale, moderateScale, verticalScale } from '../../theme';
 
@@ -18,11 +19,11 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: horizontalScale(10),
     top: verticalScale(5),
-    color: 'grey',
+    color: Colors.white,
   },
   progressView: {
     position: 'absolute',
-    bottom: verticalScale(85),
+    bottom: verticalScale(75),
     left: horizontalScale(20),
   },
   cardFooterText: {
@@ -32,6 +33,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(10),
   },
   boldFont: { fontWeight: 'bold' },
+  trailerDescription: { color: Colors.white },
   playButton: {
     position: 'absolute',
     left: horizontalScale(140),
@@ -43,5 +45,12 @@ export const styles = StyleSheet.create({
     width: horizontalScale(300),
     borderRadius: moderateScale(10),
     overflow: 'hidden',
+    marginTop: verticalScale(10),
+  },
+  cardText: {
+    width: horizontalScale(280),
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: verticalScale(20),
   },
 });
