@@ -1,10 +1,18 @@
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import {
+  Certification,
+  Header,
+  DetailsImage,
+  DetailsTitle,
+  Overview,
+} from '../components';
 import { navigationStrings, strings } from '../constants';
 import { RootStackParams } from '../navigation/AppNavigation';
-import { DefaultStyles } from '../theme';
+import { styles } from './styles/DetailsStyles';
 
 type DetailsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParams>;
@@ -16,11 +24,14 @@ const Details = ({ navigation: { navigate }, route }: DetailsScreenProps) => {
   const { params } = route;
 
   return (
-    <SafeAreaView style={DefaultStyles.container}>
-      <Text>
-        {strings.detailsScreen} {params?.id}
-      </Text>
-      <Button title={strings.homeScreen} onPress={() => navigate(HOME)} />
+    <SafeAreaView style={styles.container}>
+      <Header leftIcon={strings.backButton} onPress={() => navigate(HOME)} />
+      <ScrollView contentContainerStyle={styles.detailsView}>
+        <DetailsImage />
+        <DetailsTitle />
+        <Certification />
+        <Overview />
+      </ScrollView>
     </SafeAreaView>
   );
 };

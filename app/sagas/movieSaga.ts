@@ -1,7 +1,15 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import { AppConstant } from '../constants';
-import { MovieTypeProps } from '../constants/staticData';
-import MovieActions, { MovieTypes } from '../redux/movieRedux';
+import { AppConstant, MovieTypeProps } from '../constants';
+import {
+  FreeMovieActions,
+  FreeToWatchTypes,
+  LatestTrailersActions,
+  LatestTrailersTypes,
+  PopularMovieActions,
+  PopularTypes,
+  TrendingMovieActions,
+  TrendingMovieTypes,
+} from '../redux';
 import { apiConfig, getError } from '../services/Utils';
 
 type SagaProps = {
@@ -11,9 +19,9 @@ type SagaProps = {
 export interface ApiDataProps {
   data: {
     results: Array<MovieTypeProps>;
+    page: number;
+    total_pages: number;
   };
-  page: number;
-  total_pages: number;
   ok: boolean;
   status: number;
   problem: string;
@@ -25,75 +33,85 @@ const api = apiConfig(AppConstant.baseUrl);
 function* fetchPopularMovies({ endpoint }: SagaProps) {
   const popularMovies: ApiDataProps = yield api.get(endpoint);
   const {
-    data: { results: movies },
+    data: { results: movies, page },
+    status,
   } = popularMovies;
-  const error: string | boolean = yield getError(popularMovies);
+
+  const error: string | boolean = yield getError(status);
   if (!error) {
     yield put(
-      MovieActions.whatsPopular({
+      PopularMovieActions.whatsPopularData({
         popularMovies: movies,
+        page: page,
       }),
     );
   } else {
-    yield put(MovieActions.error({ error: error }));
+    yield put(PopularMovieActions.error({ error: error }));
   }
 }
 
 function* fetchFreeToWatchMovies({ endpoint }: SagaProps) {
   const freeToWatchMovies: ApiDataProps = yield api.get(endpoint);
   const {
-    data: { results: movies },
+    data: { results: movies, page },
+    status,
   } = freeToWatchMovies;
-  const error: string | boolean = yield getError(freeToWatchMovies);
+  const error: string | boolean = yield getError(status);
   if (!error) {
     yield put(
-      MovieActions.freeToWatch({
+      FreeMovieActions.freeToWatchData({
         freeMovies: movies,
+        page: page,
       }),
     );
   } else {
-    yield put(MovieActions.error({ error: error }));
+    yield put(FreeMovieActions.freeToWatchError({ error: error }));
   }
 }
 
 function* fetchLatestTrailers({ endpoint }: SagaProps) {
   const latestTrailers: ApiDataProps = yield api.get(endpoint);
   const {
-    data: { results: movies },
+    data: { results: movies, page },
+    status,
   } = latestTrailers;
-  const error: string | boolean = yield getError(latestTrailers);
+
+  const error: string | boolean = yield getError(status);
   if (!error) {
     yield put(
-      MovieActions.latestTrailers({
+      LatestTrailersActions.latestTrailersData({
         latestTrailers: movies,
+        page: page,
       }),
     );
   } else {
-    yield put(MovieActions.error({ error: error }));
+    yield put(LatestTrailersActions.latestTrailersError({ error: error }));
   }
 }
 
 function* fetchTrendingMovies({ endpoint }: SagaProps) {
   const trendingMovies: ApiDataProps = yield api.get(endpoint);
   const {
-    data: { results: movies },
+    data: { results: movies, page },
+    status,
   } = trendingMovies;
-  const error: string | boolean = yield getError(trendingMovies);
+  const error: string | boolean = yield getError(status);
 
   if (!error) {
     yield put(
-      MovieActions.trending({
+      TrendingMovieActions.trendingData({
         trendingMovies: movies,
+        page: page,
       }),
     );
   } else {
-    yield put(MovieActions.error({ error: error }));
+    yield put(TrendingMovieActions.trendingError({ error: error }));
   }
 }
 
 export default [
-  takeLatest(MovieTypes.WHATS_POPULAR_LOADING, fetchPopularMovies),
-  takeLatest(MovieTypes.FREE_TO_WATCH_LOADING, fetchFreeToWatchMovies),
-  takeLatest(MovieTypes.LATEST_TRAILERS_LOADING, fetchLatestTrailers),
-  takeLatest(MovieTypes.TRENDING_LOADING, fetchTrendingMovies),
+  takeLatest(PopularTypes.WHATS_POPULAR_LOADING, fetchPopularMovies),
+  takeLatest(FreeToWatchTypes.FREE_TO_WATCH_LOADING, fetchFreeToWatchMovies),
+  takeLatest(LatestTrailersTypes.LATEST_TRAILERS_LOADING, fetchLatestTrailers),
+  takeLatest(TrendingMovieTypes.TRENDING_LOADING, fetchTrendingMovies),
 ];
