@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useDispatch } from 'react-redux';
+import {
+  FreeMovieActions,
+  LatestTrailersActions,
+  PopularMovieActions,
+  TrendingMovieActions,
+} from '../redux';
 import { strings } from '../constants';
-import MovieActions from '../redux/movieRedux';
 import { Colors } from '../theme';
 import { styles } from './styles/ListHeaderStyles';
 
@@ -11,12 +16,24 @@ export interface ListHeaderProp {
   title: string;
   dropDownData: { label: string; value: string; endpoint: string }[];
   color?: string;
+  trailerEndPoint: React.Dispatch<React.SetStateAction<string>>;
+  freeToWatchEndPoint: React.Dispatch<React.SetStateAction<string>>;
+  whatsPopularEndPoint: React.Dispatch<React.SetStateAction<string>>;
+  trendingEndPoint: React.Dispatch<React.SetStateAction<string>>;
 }
 interface DropdownSelectedProp {
   endpoint: string;
 }
 
-const ListHeader = ({ title, dropDownData, color }: ListHeaderProp) => {
+const ListHeader = ({
+  title,
+  dropDownData,
+  color,
+  freeToWatchEndPoint,
+  trailerEndPoint,
+  trendingEndPoint,
+  whatsPopularEndPoint,
+}: ListHeaderProp) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(dropDownData[0].value);
   const [items, setItems] = useState(dropDownData);
@@ -37,19 +54,59 @@ const ListHeader = ({ title, dropDownData, color }: ListHeaderProp) => {
   }, [updatedData]);
 
   const fetchData = useCallback(() => {
-    title === strings.freeToWatch &&
-      dispatch(MovieActions.freeToWatchLoading(endpoint));
-    title === strings.trending &&
-      dispatch(MovieActions.trendingLoading(endpoint));
-    title === strings.whatsPopular &&
-      dispatch(MovieActions.whatsPopularLoading(endpoint));
-    title === strings.latestTrailers &&
-      dispatch(MovieActions.latestTrailersLoading(endpoint));
+    switch (title) {
+      case strings.freeToWatch:
+        dispatch(FreeMovieActions.freeToWatchLoading(endpoint));
+        break;
+      case strings.trending:
+        dispatch(TrendingMovieActions.trendingLoading(endpoint));
+        break;
+      case strings.whatsPopular:
+        dispatch(PopularMovieActions.whatsPopularLoading(endpoint));
+        break;
+      case strings.latestTrailers:
+        dispatch(LatestTrailersActions.latestTrailersLoading(endpoint));
+    }
   }, [endpoint, dispatch, title]);
 
   useEffect(() => {
     fetchData();
   }, [endpoint, fetchData]);
+
+  const updateTrailer = useCallback(() => {
+    switch (title) {
+      case strings.freeToWatch:
+        freeToWatchEndPoint(endpoint);
+        break;
+      case strings.trending:
+        trendingEndPoint(endpoint);
+        break;
+      case strings.whatsPopular:
+        whatsPopularEndPoint(endpoint);
+        break;
+      case strings.latestTrailers:
+        trailerEndPoint(endpoint);
+        break;
+    }
+  }, [
+    endpoint,
+    freeToWatchEndPoint,
+    title,
+    trailerEndPoint,
+    trendingEndPoint,
+    whatsPopularEndPoint,
+  ]);
+
+  useEffect(() => {
+    updateTrailer();
+  }, [updateTrailer]);
+
+  useEffect(() => {
+    dispatch(LatestTrailersActions.resetPaging());
+    dispatch(TrendingMovieActions.resetPaging());
+    dispatch(PopularMovieActions.resetPaging());
+    dispatch(FreeMovieActions.resetPaging());
+  }, [dispatch]);
 
   const dropdownBackgroundStyle = StyleSheet.flatten([
     styles.dropdown,
@@ -58,7 +115,7 @@ const ListHeader = ({ title, dropDownData, color }: ListHeaderProp) => {
     },
   ]);
 
-  const plachholderTitleStyle = StyleSheet.flatten([
+  const placeholderTitleStyle = StyleSheet.flatten([
     styles.dropdownLabel,
     title === strings.latestTrailers && { color: Colors.primary },
   ]);
@@ -87,7 +144,7 @@ const ListHeader = ({ title, dropDownData, color }: ListHeaderProp) => {
         showTickIcon={false}
         autoScroll={true}
         placeholder={dropDownData.find(item => value === item.value)?.label}
-        placeholderStyle={plachholderTitleStyle}
+        placeholderStyle={placeholderTitleStyle}
         onSelectItem={(selectedItem: DropdownSelectedProp) =>
           setEndPoint(selectedItem.endpoint)
         }

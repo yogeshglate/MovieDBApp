@@ -1,6 +1,5 @@
 import apisauce from 'apisauce';
 import { AppConstant, strings } from '../constants';
-import { ApiDataProps } from '../sagas/movieSaga';
 
 export const apiConfig = (baseURL: string) =>
   apisauce.create({
@@ -9,15 +8,15 @@ export const apiConfig = (baseURL: string) =>
     headers: { 'Cache-Control': strings.noCache },
   });
 
-export async function getError(response: ApiDataProps) {
-  if (response?.status === AppConstant.SUCCESS_CODE) {
-    return false;
+export async function getError(status: number) {
+  switch (status) {
+    case AppConstant.SUCCESS_CODE:
+      return false;
+    case AppConstant.KEY_ERROR:
+      return strings.keyError;
+    case AppConstant.NOT_FOUND:
+      return strings.notFoundError;
+    default:
+      return strings.somethingWrong;
   }
-  if (response?.status === AppConstant.KEY_ERROR) {
-    return strings.keyError;
-  }
-  if (response?.status === AppConstant.NOT_FOUND) {
-    return strings.notFoundError;
-  }
-  return strings.somethingWrong;
 }

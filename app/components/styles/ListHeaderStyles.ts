@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     marginBottom: -verticalScale(Metrics.screenHeight * 0.03),
+    zIndex: 1,
   },
   headerText: {
     fontSize: moderateScale(24),
