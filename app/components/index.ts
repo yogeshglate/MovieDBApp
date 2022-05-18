@@ -3,3 +3,7 @@ export { default as Header } from './Header';
 export { default as ListHeader } from './ListHeader';
 export { default as MovieList } from './MovieList';
 export { default as Loader } from './Loader';
+export { default as Certification } from './Certification';
+export { default as DetailsImage } from './DetailsImage';
+export { default as DetailsTitle } from './DetailsTitle';
+export { default as Overview } from './Overview';

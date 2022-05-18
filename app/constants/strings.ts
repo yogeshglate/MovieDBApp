@@ -31,4 +31,18 @@ export default {
   play: 'play',
   keyError: 'Invalid API key: You must be granted a valid key.',
   notFoundError: 'The resource you requested could not be found.',
+  encanto: 'Encanto',
+  year: ' (2021)',
+  userScore: 'User Score',
+  separator: ' │ ',
+  playTrailer: ' Play Trailer',
+  rating: 'NR',
+  releaseDate: ' 02/11/2021',
+  country: ' (US) • ',
+  runtime: ' 1h 26m',
+  genres: 'Thriller, Horror',
+  description:
+    'On a hiking trip to rekindle their marriage, a couple find themselves fleeing for their lives in the unforgiving wilderness from an unknown shooter.',
+  directorName: 'Alain Darborg',
+  director: 'Director',
 };
