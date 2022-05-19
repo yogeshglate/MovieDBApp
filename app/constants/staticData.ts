@@ -95,6 +95,13 @@ export const flatListData = [
   },
 ];
 
+export const detailsAPI = {
+  movieBase: '/movie/',
+  movieEnd: `?api_key=${AppConstant.apiKey}&append_to_response=release_dates,casts`,
+  tvBase: '/tv/',
+  tvEnd: `?api_key=${AppConstant.apiKey}&append_to_response=content_ratings`,
+};
+
 export const temporaryCardData = [
   { id: 1, value: 10 },
   { id: 2, value: 10 },

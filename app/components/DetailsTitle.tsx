@@ -6,20 +6,27 @@ import { Colors } from '../theme';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { strings } from '../constants';
 
-const DetailsTitle = () => {
+type DetailsTitleProps = {
+  title?: string;
+  year?: number;
+  progressValue: number | 0;
+};
+
+const DetailsTitle = ({ progressValue, title, year }: DetailsTitleProps) => {
+  const progressBarColor =
+    progressValue >= 70 ? Colors.indicatorGreen : Colors.indicatorYellow;
+
   return (
     <>
       <View style={styles.detailsTitleText}>
-        <Text style={{ ...styles.headerText, ...styles.bold }}>
-          {strings.encanto}
-        </Text>
-        <Text style={styles.headerText}>{strings.year}</Text>
+        <Text style={{ ...styles.headerText, ...styles.bold }}>{title}</Text>
+        <Text style={styles.headerText}>{year}</Text>
       </View>
       <View style={styles.detailsContainer}>
         <View style={styles.rowCenter}>
           <CircularProgress
-            value={77}
-            activeStrokeColor={Colors.indicatorGreen}
+            value={progressValue}
+            activeStrokeColor={progressBarColor}
             inActiveStrokeColor={Colors.black}
             inActiveStrokeOpacity={0.6}
             activeStrokeWidth={5}

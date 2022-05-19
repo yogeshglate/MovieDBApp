@@ -1,16 +1,23 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import { AppConstant, MovieTypeProps } from '../constants';
+import {
+  AppConstant,
+  DetailsProps,
+  FilteredDetailsProps,
+  MovieTypeProps,
+} from '../constants';
 import {
   FreeMovieActions,
   FreeToWatchTypes,
   LatestTrailersActions,
   LatestTrailersTypes,
+  MovieDetailsActions,
+  MovieDetailsTypes,
   PopularMovieActions,
   PopularTypes,
   TrendingMovieActions,
   TrendingMovieTypes,
 } from '../redux';
-import { apiConfig, getError } from '../services/Utils';
+import { apiConfig, filterDetailsData, getError } from '../services/Utils';
 
 type SagaProps = {
   endpoint: string;
@@ -26,6 +33,11 @@ export interface ApiDataProps {
   status: number;
   problem: string;
   status_message: string;
+}
+
+export interface DetailsAPIProps {
+  data: DetailsProps;
+  status: number;
 }
 
 const api = apiConfig(AppConstant.baseUrl);
@@ -109,9 +121,27 @@ function* fetchTrendingMovies({ endpoint }: SagaProps) {
   }
 }
 
+function* fetchMovieDetails({ endpoint }: SagaProps) {
+  const movieDetails: DetailsAPIProps = yield api.get(endpoint);
+  const detailsData: FilteredDetailsProps = yield filterDetailsData(
+    movieDetails,
+  );
+  const error: string | boolean = yield getError(movieDetails?.status);
+  if (!error) {
+    yield put(
+      MovieDetailsActions.detailsMovieData({
+        movieDetails: detailsData,
+      }),
+    );
+  } else {
+    yield put(MovieDetailsActions.detailsMovieError({ error: error }));
+  }
+}
+
 export default [
   takeLatest(PopularTypes.WHATS_POPULAR_LOADING, fetchPopularMovies),
   takeLatest(FreeToWatchTypes.FREE_TO_WATCH_LOADING, fetchFreeToWatchMovies),
   takeLatest(LatestTrailersTypes.LATEST_TRAILERS_LOADING, fetchLatestTrailers),
   takeLatest(TrendingMovieTypes.TRENDING_LOADING, fetchTrendingMovies),
+  takeLatest(MovieDetailsTypes.DETAILS_MOVIE_LOADING, fetchMovieDetails),
 ];
