@@ -3,6 +3,7 @@ import { createActions, createReducer } from 'reduxsauce';
 import Immutable, { ImmutableObject } from 'seamless-immutable';
 import { ActionTypes, MovieTypeProps } from '../constants';
 import { RootState } from '../redux';
+import { getLoading, getMovies } from '../services/Utils';
 
 export interface ActionParamTypes extends Action<ActionTypes> {
   freeMoviesData: { freeMovies: MovieTypeProps[]; page: number };
@@ -41,18 +42,25 @@ export const FreeToWatchSelector = {
 export const setFreeToWatchLoading = (
   state: ImmutableObject<AuthStateTypes>,
 ) => {
-  return state.merge({ ...state, freeToWatchLoading: true });
+  return state.merge({
+    ...state,
+    freeToWatchLoading: getLoading(
+      state.freeToWatchMovies.length,
+      state.freeToWatchPaging,
+    ),
+  });
 };
 
 export const setFreeToWatchMovies = (
   state: ImmutableObject<AuthStateTypes>,
   { freeMoviesData: { freeMovies, page } }: ActionParamTypes,
 ) => {
+  const movies = getMovies(state.freeToWatchMovies, freeMovies);
+
   return state.merge({
     ...state,
     freeToWatchLoading: false,
-    freeToWatchMovies:
-      page === 1 ? freeMovies : [...state.freeToWatchMovies, ...freeMovies],
+    freeToWatchMovies: page === 1 ? freeMovies : movies,
     freeToWatchPaging: page,
   });
 };

@@ -8,7 +8,10 @@ type OverviewPropTypes = {
   director?: string;
 };
 
-const Overview = ({ overview, director = strings.NA }: OverviewPropTypes) => {
+const Overview = ({
+  overview = strings.na,
+  director = strings.na,
+}: OverviewPropTypes) => {
   return (
     <>
       <View style={styles.overviewView}>

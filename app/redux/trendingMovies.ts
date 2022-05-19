@@ -3,6 +3,7 @@ import { createActions, createReducer } from 'reduxsauce';
 import Immutable, { ImmutableObject } from 'seamless-immutable';
 import { ActionTypes, MovieTypeProps } from '../constants';
 import { RootState } from '../redux';
+import { getLoading, getMovies } from '../services/Utils';
 
 export interface ActionParamTypes extends Action<ActionTypes> {
   trendingMoviesData: { trendingMovies: MovieTypeProps[]; page: number };
@@ -39,20 +40,25 @@ export const TrendingMoviesSelector = {
 };
 
 export const setTrendingLoading = (state: ImmutableObject<AuthStateTypes>) => {
-  return state.merge({ ...state, trendingLoading: true });
+  return state.merge({
+    ...state,
+    trendingLoading: getLoading(
+      state.trendingMovies.length,
+      state.trendingPaging,
+    ),
+  });
 };
 
 export const setTrendingMovies = (
   state: ImmutableObject<AuthStateTypes>,
   { trendingMoviesData: { trendingMovies, page } }: ActionParamTypes,
 ) => {
+  const movies = getMovies(state.trendingMovies, trendingMovies);
+
   return state.merge({
     ...state,
     trendingLoading: false,
-    trendingMovies:
-      page === 1
-        ? trendingMovies
-        : [...state.trendingMovies, ...trendingMovies],
+    trendingMovies: page === 1 ? trendingMovies : movies,
     trendingPaging: page,
   });
 };
