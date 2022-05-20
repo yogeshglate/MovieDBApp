@@ -1,5 +1,6 @@
 import apisauce from 'apisauce';
-import { AppConstant, strings } from '../constants';
+import { ImmutableArray } from 'seamless-immutable';
+import { AppConstant, MovieTypeProps, strings } from '../constants';
 import { DetailsAPIProps } from '../sagas/movieSaga';
 
 export const apiConfig = (baseURL: string) =>
@@ -84,7 +85,7 @@ const getMovieRating = (
   release_dates: DetailsAPIProps['data']['release_dates'],
 ) => {
   return release_dates?.results?.filter(
-    item => item?.iso_3166_1 === strings.US,
+    item => item?.iso_3166_1 === strings.us,
   )[0]?.release_dates[0]?.certification;
 };
 
@@ -92,10 +93,21 @@ const getTvRating = (
   content_ratings: DetailsAPIProps['data']['content_ratings'],
 ) => {
   return content_ratings?.results?.filter(
-    item => item?.iso_3166_1 === strings.US,
-  )[0].rating;
+    item => item?.iso_3166_1 === strings.us,
+  )[0]?.rating;
 };
 
 const getDirector = (casts: DetailsAPIProps['data']['casts']) => {
   return casts?.crew?.filter(item => item?.job === strings.director)[0]?.name;
+};
+
+export const getLoading = (length: number, paging: number) => {
+  return length < 20 && paging === 1 ? true : false;
+};
+
+export const getMovies = (
+  oldMovies: ImmutableArray<MovieTypeProps>,
+  newMovies: MovieTypeProps[],
+) => {
+  return [...oldMovies, ...newMovies];
 };

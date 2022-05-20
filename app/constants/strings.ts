@@ -45,6 +45,6 @@ export default {
     'On a hiking trip to rekindle their marriage, a couple find themselves fleeing for their lives in the unforgiving wilderness from an unknown shooter.',
   directorName: 'Alain Darborg',
   director: 'Director',
-  US: 'US',
-  NA: 'NA',
+  us: 'US',
+  na: 'NA',
 };

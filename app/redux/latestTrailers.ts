@@ -3,6 +3,7 @@ import { createActions, createReducer } from 'reduxsauce';
 import Immutable, { ImmutableObject } from 'seamless-immutable';
 import { ActionTypes, MovieTypeProps } from '../constants';
 import { RootState } from '../redux';
+import { getLoading, getMovies } from '../services/Utils';
 
 export interface ActionParamTypes extends Action<ActionTypes> {
   latestTrailersData: { latestTrailers: MovieTypeProps[]; page: number };
@@ -41,20 +42,25 @@ export const LatestTrailersSelector = {
 export const setLatestTrailersLoading = (
   state: ImmutableObject<AuthStateTypes>,
 ) => {
-  return state.merge({ ...state, latestTrailersLoading: true });
+  return state.merge({
+    ...state,
+    latestTrailersLoading: getLoading(
+      state.latestTrailers.length,
+      state.latestTrailersPaging,
+    ),
+  });
 };
 
 export const setLatestTrailers = (
   state: ImmutableObject<AuthStateTypes>,
   { latestTrailersData: { latestTrailers, page } }: ActionParamTypes,
 ) => {
+  const trailers = getMovies(state.latestTrailers, latestTrailers);
+
   return state.merge({
     ...state,
     latestTrailersLoading: false,
-    latestTrailers:
-      page === 1
-        ? latestTrailers
-        : [...state.latestTrailers, ...latestTrailers],
+    latestTrailers: page === 1 ? latestTrailers : trailers,
     latestTrailersPaging: page,
   });
 };
