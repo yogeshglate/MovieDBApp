@@ -1,4 +1,9 @@
 import { combineReducers } from 'redux';
+import MovieDetailsActions, {
+  movieDetailsReducer,
+  MovieDetailsSelector,
+  MovieDetailsTypes,
+} from './details';
 import FreeMovieActions, {
   freeToWatchReducer,
   FreeToWatchSelector,
@@ -25,6 +30,7 @@ export const rootReducer = combineReducers({
   freeToWatchMoviesState: freeToWatchReducer,
   latestTrailersState: latestTrailerReducer,
   trendingMoviesState: trendingMoviesReducer,
+  movieDetailsState: movieDetailsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -42,4 +48,7 @@ export {
   LatestTrailersSelector,
   PopularMoviesSelector,
   TrendingMoviesSelector,
+  MovieDetailsSelector,
+  MovieDetailsTypes,
+  MovieDetailsActions,
 };

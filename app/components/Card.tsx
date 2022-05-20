@@ -9,8 +9,15 @@ import {
 } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AppConstant, navigationStrings, strings } from '../constants';
+import { useDispatch } from 'react-redux';
+import {
+  AppConstant,
+  detailsAPI,
+  navigationStrings,
+  strings,
+} from '../constants';
 import { HomeScreenProps } from '../navigation/AppNavigation';
+import { MovieDetailsActions } from '../redux';
 import { Colors, Images } from '../theme';
 import { styles } from './styles/CardStyles';
 
@@ -22,6 +29,8 @@ type CardProps = {
   title: string;
   trailerName?: string;
   description?: string;
+  id: number;
+  isMovie: boolean;
 };
 
 const Card = ({
@@ -32,27 +41,38 @@ const Card = ({
   title,
   trailerName,
   description,
+  id,
+  isMovie,
 }: CardProps) => {
   const navigation = useNavigation<HomeScreenProps['navigation']>();
-
   const progressBarColor =
     progressValue >= 70 ? Colors.indicatorGreen : Colors.indicatorYellow;
-
   const trailerNameStyle = StyleSheet.flatten([
     styles.boldFont,
     title === strings.latestTrailers && styles.trailerDescription,
   ]);
-
   const trailerDescriptionStyle = StyleSheet.flatten([
     title === strings.latestTrailers && styles.trailerDescription,
   ]);
+  const dispatch = useDispatch();
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() =>
-        navigation.navigate(navigationStrings.DETAILS, { id: AppConstant.id })
-      }>
+      onPress={() => {
+        navigation.navigate(navigationStrings.DETAILS, { id: AppConstant.id });
+        isMovie
+          ? dispatch(
+              MovieDetailsActions.detailsMovieLoading(
+                `${detailsAPI.movieBase}${id}${detailsAPI.movieEnd}`,
+              ),
+            )
+          : dispatch(
+              MovieDetailsActions.detailsMovieLoading(
+                `${detailsAPI.tvBase}${id}${detailsAPI.tvEnd}`,
+              ),
+            );
+      }}>
       {title !== strings.latestTrailers ? (
         <>
           <ImageBackground

@@ -3,7 +3,12 @@ import React from 'react';
 import { styles } from './styles/OverviewStyles';
 import { strings } from '../constants';
 
-const Overview = () => {
+type OverviewPropTypes = {
+  overview?: string;
+  director?: string;
+};
+
+const Overview = ({ overview, director = strings.NA }: OverviewPropTypes) => {
   return (
     <>
       <View style={styles.overviewView}>
@@ -13,14 +18,12 @@ const Overview = () => {
           </Text>
         </View>
         <View>
-          <Text style={styles.text}>{strings.description}</Text>
+          <Text style={styles.text}>{overview}</Text>
         </View>
       </View>
       <View style={styles.directorView}>
         <View style={styles.marginBottom}>
-          <Text style={{ ...styles.text, ...styles.bold }}>
-            {strings.directorName}
-          </Text>
+          <Text style={{ ...styles.text, ...styles.bold }}>{director}</Text>
         </View>
         <View>
           <Text style={styles.text}>{strings.director}</Text>

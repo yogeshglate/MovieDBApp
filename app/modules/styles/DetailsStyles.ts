@@ -6,6 +6,5 @@ export const styles = StyleSheet.create({
   detailsView: {
     alignItems: 'center',
     backgroundColor: Colors.detailsBackground,
-    flex: 1,
   },
 });

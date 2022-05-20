@@ -32,6 +32,8 @@ const MovieList = ({ title, dropDownData, movieData }: MovieListProps) => {
         title={title}
         trailerName={item?.original_title ?? item?.original_name}
         description={item?.overview ?? item?.overview}
+        id={item?.id}
+        isMovie={item?.original_title ? true : false}
       />
     );
   };
