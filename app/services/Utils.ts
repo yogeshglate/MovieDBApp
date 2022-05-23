@@ -105,9 +105,14 @@ export const getLoading = (length: number, paging: number) => {
   return length < 20 && paging === 1 ? true : false;
 };
 
-export const getMovies = (
+export const getUniqueMovies = (
   oldMovies: ImmutableArray<MovieTypeProps>,
   newMovies: MovieTypeProps[],
 ) => {
-  return [...oldMovies, ...newMovies];
+  const apiData = [...oldMovies, ...newMovies];
+  const uniqueMovies = [
+    ...new Map(apiData.map(item => [item.id, item])).values(),
+  ];
+
+  return uniqueMovies;
 };
